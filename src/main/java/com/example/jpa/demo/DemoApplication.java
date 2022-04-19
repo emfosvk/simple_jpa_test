@@ -1,8 +1,8 @@
 package com.example.jpa.demo;
 
-import com.example.jpa.demo.entity.Member;
-import com.example.jpa.demo.entity.Player;
-import com.example.jpa.demo.entity.PlayerType;
+import com.example.jpa.demo.entity.*;
+import com.example.jpa.demo.entity.id.SlipID;
+import com.querydsl.jpa.impl.JPAQuery;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
+import java.util.List;
 
 @SpringBootApplication
 public class DemoApplication {
@@ -58,7 +59,7 @@ public class DemoApplication {
 
 			//[START] - 2Week
 
-
+			/*
 			Player player1 = new Player();
 			player1.setPlayerName("Hong Gil Dong");
 			player1.setPlayerHistory("History");
@@ -68,14 +69,6 @@ public class DemoApplication {
 			player1.setEntryDate(nowDate);
 			player1.setEntryTime(nowDate);
 			player1.setEntryDateTime(nowDate);
-
-			//LocalDateTime localDateTime = LocalDateTime.now();
-			//LocalDate localDate = LocalDate.now();
-			//LocalTime localTime = LocalTime.now();
-
-			//player1.setQuitDate(localDate);
-			//player1.setQuitTime(localTime);
-			//player1.setQuitDateTime(localDateTime);
 
 			entityManager.persist(player1);
 
@@ -100,8 +93,65 @@ public class DemoApplication {
 			entityManager.persist(player2);
 
 			entityTransaction.commit();
-
+			*/
 			//[E N D] - 2Week
+
+			//[START] - 3Week
+
+			/*
+			Bill bill = new Bill();
+			bill.setBillNo(1L);
+			bill.setBillOpenDate(LocalDateTime.now());
+			bill.setTotalAmt(50000L);
+
+			entityManager.persist(bill);
+
+
+			Slip slip = new Slip();
+			slip.setBill(bill);
+			slip.setBillSeqNo(1L);
+			slip.setAmt(30000L);
+			slip.setItemName("Beef Stake");
+
+			Slip slip2 = new Slip();
+			slip2.setBill(bill);
+			slip2.setBillSeqNo(2L);
+			slip2.setItemName("Fried Chicken");
+			slip2.setAmt(20000L);
+
+			entityManager.persist(slip);
+			entityManager.persist(slip2);
+
+			entityTransaction.commit();
+
+			 */
+
+
+			/*
+			Bill selBill = entityManager.find(Bill.class, 1L);
+
+			SlipID slipID = new SlipID();
+			slipID.setBill(selBill);
+			slipID.setBillSeqNo(1L);
+			Slip selSlip = entityManager.find(Slip.class, slipID);
+			*/
+
+			JPAQuery<Bill> query1 = new JPAQuery<>(entityManager);
+			QBill qBill = QBill.bill;
+
+			List<Bill> billList =
+					query1.from(qBill)
+							.where(qBill.billNo.eq(1L))
+							.fetch();
+
+			JPAQuery<Slip> query2 = new JPAQuery<>(entityManager);
+			QSlip qSlip = QSlip.slip;
+			List<Slip> slipList = query2.from(qSlip)
+					.where(qSlip.bill.billNo.eq(1L))
+					.fetch();
+			System.out.println("#################### " + String.valueOf(slipList.size()));
+
+			//[E N D] - 3Week
 
 
 		} catch (Exception e) {

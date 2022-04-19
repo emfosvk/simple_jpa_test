@@ -18,18 +18,21 @@ import java.util.Date;
 @SequenceGenerator(
         name = "PLAYER_SEQ_GEN",
         sequenceName = "PLAYER_SEQ",
-        initialValue = 1,
-        allocationSize = 10
+        initialValue = 100,
+        allocationSize = 100
 )
 public class Player {
 
     @Id
-    @Column(name = "PLAYER_ID", nullable = false, length = 10)
+    @Column(name = "PLAYER_ID")
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
             generator = "PLAYER_SEQ_GEN"
     )
     private Long playerId;
+
+
+
 
     @Column(name = "PLAYER_NAME", nullable = false, length = 100)
     private String playerName;
